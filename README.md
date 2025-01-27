@@ -169,32 +169,6 @@ int main() {
 
 ---
 
-## **How to Run the Examples**
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/cpp-multithreading.git
-   ```
-
-2. Navigate to the project folder:
-   ```bash
-   cd cpp-multithreading
-   ```
-
-3. Compile and run a specific example:
-   ```bash
-   g++ -std=c++11 example.cpp -pthread -o example
-   ./example
-   ```
-
----
-
-## **References:**
-- [C++ Threads Documentation](https://en.cppreference.com/w/cpp/thread)
-- [C++ Concurrency in Action - Book](https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition)
-
----
-
 ## **License**
 This project is licensed under the MIT License.
 
