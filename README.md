@@ -109,7 +109,7 @@ int main() {
 ```
 ---
 
-3. Functors (Function Objects)
+### 3. Functors (Function Objects)
 A C++ functor (function object) is a class or struct object that can be called like a function.
 ```cpp
 #include <iostream>
@@ -145,7 +145,7 @@ return 0;
 ```
 ---
 
-4. Non-static Member Functions
+### 4. Non-static Member Functions
 A non-static member function is a function that is declared in a member specification of a class without a static or friend specifier.
 ```cpp
 #include <iostream>
@@ -183,7 +183,7 @@ int main() {
 
 ---
 
-5. Static Member Functions
+### 5. Static Member Functions
 A static member function in C++ is a function that belongs to a class rather than any specific object of the class. It can be called using the class name and does not require an instance of the class.
 ```cpp
 #include <iostream>
