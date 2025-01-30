@@ -1,12 +1,19 @@
 # C++ Multithreading Concepts
 
-This repository covers essential concepts related to multithreading in C++, including thread management, synchronization mechanisms, and asynchronous operations.
+---
+
+### Threads++
+In every application there is a default thread, which is main(); inside main() we create other threads.
+```"A thread is also known as a lightweight process. The idea is to achieve parallelism by dividing a process into multiple threads."```
+
+**Exp.**
+1. The browser has multiple tabs that can be different threads.
+2. MS Word must be using multiple threads, one thread to format the text and another thread to process inputs (spell checker). 
+3. Visual Studio Code editor would be using threading for auto-completing the code (IntelliSense).
 
 ---
 
-## **Topics Covered:**
-
-### 1. Multithreading in C++
+### Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
 
 **Ways to Create Threads:**
