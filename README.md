@@ -2,7 +2,7 @@
 
 ---
 
-### Threads++
+### Threads
 In every application there is a default thread, which is main(); inside main() we create other threads.
 ```"A thread is also known as a lightweight process. The idea is to achieve parallelism by dividing a process into multiple threads."```
 
@@ -13,15 +13,15 @@ In every application there is a default thread, which is main(); inside main() w
 
 ---
 
-### Multithreading in C++
+### 1. Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
 
 **Ways to Create Threads:**
-1. Function Pointers
-2. Lambda Expressions
-3. Functors (Function Objects)
-4. Non-static Member Functions
-5. Static Member Functions
+A. Function Pointers
+B. Lambda Expressions
+C. Functors (Function Objects)
+D. Non-static Member Functions
+E. Static Member Functions
 
 **Example:**
 ```cpp
@@ -29,16 +29,45 @@ Multithreading allows concurrent execution of multiple tasks to improve performa
 #include <thread>
 
 void printMessage() {
-    std::cout << "Hello from thread!" << std::endl;
+    cout << "Hello from thread!" << endl;
 }
 
 int main() {
-    std::thread t(printMessage);
+    thread t(printMessage);
     t.join();
     return 0;
 }
 ```
 
+---
+
+### A. Function Pointers
+This is very basic form of thread creation
+```cpp
+void fun(int x){
+    while(x->0){
+    cout<<x<<endl;
+    }
+}
+int main(){
+thread t1(fun, 11);
+t1.join();
+return 0;
+}
+
+```
+---
+
+### B. Lambda Expressions
+Lambda expression allows us to define anonymous function objects (functors) which can either be used inline or passed as an argument.
+```cpp
+int main(){
+thread t1(fun, 11);
+t1.join();
+return 0;
+}
+
+```
 ---
 
 ### 2. Thread Management
