@@ -222,6 +222,7 @@ int main() {
 ### B. Thread Management
 
 - **`join()`**: Waits for the thread to finish execution.
+  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
 ```cpp
 #include <iostream>
 #include <thread>
@@ -260,6 +261,8 @@ main() after
 ```
 
 - **`detach()`**: Allows the thread to run independently.
+  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
+
 - **`joinable()`**: Checks if a thread is still joinable.
 
 **Example:**
