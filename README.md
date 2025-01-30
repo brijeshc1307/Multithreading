@@ -354,7 +354,7 @@ Hello
 
 ### 3. Mutex
 
-A **mutex (mutual exclusion)** is used to prevent race conditions by allowing only one thread to access a critical section at a time.
+A **mutex (mutual exclusion)** is used to prevent Race Conditions by allowing only one thread to access a critical section at a time.
 
 **Types of Mutexes:**
 - `std::mutex`
@@ -369,6 +369,89 @@ void sharedFunction() {
     // Critical section
 }
 ```
+### **Race Condition**  
+
+A **race condition** occurs when multiple threads access and modify shared data simultaneously, leading to unpredictable behavior. This happens when proper synchronization mechanisms (like mutexes) are not used.  
+
+```cpp
+#include <iostream>
+#include <thread>
+
+using namespace std;
+
+int counter = 0; // Shared resource
+
+void increment() {
+    for (int i = 0; i < 100000; i++) {
+        counter++; // Race condition occurs here
+    }
+}
+
+int main() {
+    thread t1(increment);
+    thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    cout << "Final Counter Value: " << counter << endl; // Unexpected output due to race condition
+    return 0;
+}
+```
+```txt
+Final Counter Value: 149951
+```
+### **Expected vs. Actual Output**
+- **Expected:** `counter` should be `200000` (100000 increments per thread).  
+- **Actual:** The result varies each time due to **race conditions**, often producing a number **less than 200000** because both threads modify `counter` without synchronization.
+
+---
+
+### **Fixing Race Condition using `std::mutex`**
+To prevent race conditions, use a **mutex (`std::mutex`)** to ensure that only one thread modifies `counter` at a time.
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+using namespace std;
+
+int counter = 0; 
+mutex mtx; // Mutex to protect shared resource
+
+void increment() {
+    for (int i = 0; i < 100000; i++) {
+        mtx.lock();   // Lock before modifying shared data
+        counter++;    // Critical section
+        mtx.unlock(); // Unlock after modification
+    }
+}
+
+int main() {
+    thread t1(increment);
+    thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    cout << "Final Counter Value: " << counter << endl; // Always 200000
+    return 0;
+}
+```
+```txt
+Final Counter Value: 200000
+```
+---
+
+### **Key Takeaways**
+   **Race Condition Definition:**  
+   - Occurs when multiple threads access and modify shared data concurrently, leading to unpredictable results.     
+   **Why it Happens:**  
+   - CPU switches between threads at unpredictable times, causing lost updates to shared variables.  
+   **Solution:**  
+   - Use **`std::mutex`** to lock critical sections and prevent concurrent modification.  
+   - Alternative: **`std::atomic<int>`** can also be used for simple integer operations.
 
 ---
 
