@@ -261,7 +261,43 @@ main() after
 ```
 
 - **`detach()`**: Allows the thread to run independently.
-  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
+  ```Note: Double t.detach() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
+```cpp
+#include <iostream>
+#include <thread>
+#include <chrono> // Required for std::chrono::seconds
+using namespace std;
+
+// Function to be executed by the thread
+void run(int count) {
+    while (count--> 0) {
+        cout<<"Hello"<<endl;
+        this_thread::sleep_for(chrono::seconds(5)); // Pause for 1 second in each iteration
+        //cout<<"Thread finished"<<endl;
+        
+    }
+}
+
+int main() {
+    thread t1(run, 10);   // Create a thread t1 that runs the 'run' function with an argument of 10
+    cout << "main() " << endl;  // Print message from the main thread
+    t1.detach(); // Wait for t1 to complete execution
+    //t1.detach();
+    cout << "main() after " << endl;  // Print message after t1 has finished
+    return 0;
+}
+```
+```txt
+main() 
+Hello
+main() after
+
+If we print cout<<"Thread finished"<<endl; then output
+main() 
+main() after
+
+Beacause we detached our thread t1. we are not saying that wait for complete so we got above result.
+```
 
 - **`joinable()`**: Checks if a thread is still joinable.
 
@@ -273,6 +309,47 @@ if (t.joinable()) {
 }
 ```
 
+---
+```cpp
+#include <iostream>
+#include <thread>
+#include <chrono> // Required for std::chrono::seconds
+using namespace std;
+
+// Function to be executed by the thread
+void run(int count) {
+    while (count--> 0) {
+        cout<<"Hello"<<endl;
+         // Pause for 1 second in each iteration
+        //cout<<"Thread finished"<<endl;
+        
+    }
+}
+
+int main() {
+    thread t1(run, 10);   // Create a thread t1 that runs the 'run' function with an argument of 10
+    cout << "main() " << endl;  // Print message from the main thread
+    t1.detach(); // Wait for t1 to complete execution
+    //t1.detach();
+    cout << "main() after " << endl;  // Print message after t1 has finished
+    this_thread::sleep_for(chrono::seconds(5));
+    return 0;
+}
+```
+```txt
+main() 
+main() after 
+Hello
+Hello
+Hello
+Hello
+Hello
+Hello
+Hello
+Hello
+Hello
+Hello
+```
 ---
 
 ### 3. Mutex
