@@ -13,17 +13,49 @@ In every application there is a default thread, which is main(); inside main() w
 
 ---
 
-### 1. Multithreading in C++
+### A. Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
 
 **Ways to Create Threads:**
-A. Function Pointers
-B. Lambda Expressions
-C. Functors (Function Objects)
-D. Non-static Member Functions
-E. Static Member Functions
+1. Function Pointers
+2. Lambda Expressions
+3. Functors (Function Objects)
+4. Non-static Member Functions
+5. Static Member Functions
 
-**Example:**
+---
+
+### 1. Function Pointers
+This is very basic form of thread creation
+```cpp
+#include <iostream>
+#include <thread>
+using namespace std;
+
+void fun(int x){
+    while(x-->0){
+    cout<<x<<endl;
+    }
+}
+int main(){
+thread t1(fun, 10);
+t1.join();
+return 0;
+}
+```
+```txt
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+```
+
 ```cpp
 #include <iostream>
 #include <thread>
@@ -38,39 +70,156 @@ int main() {
     return 0;
 }
 ```
-
----
-
-### A. Function Pointers
-This is very basic form of thread creation
-```cpp
-void fun(int x){
-    while(x->0){
-    cout<<x<<endl;
-    }
-}
-int main(){
-thread t1(fun, 11);
-t1.join();
-return 0;
-}
-
+```
+Hello from thread!
 ```
 ---
 
-### B. Lambda Expressions
+### 2. Lambda Expressions
 Lambda expression allows us to define anonymous function objects (functors) which can either be used inline or passed as an argument.
 ```cpp
-int main(){
-thread t1(fun, 11);
-t1.join();
-return 0;
-}
+#include <iostream>
+#include <thread>
+using namespace std;
 
+int main() {
+    // we can directly inject lambda at thread creation time.
+    
+    auto fun=[](int x){
+        while(x-->0){
+            cout<<x<<endl;
+        }
+    };
+    thread t(fun, 10);
+    t.join();
+    return 0;
+}
+```
+```txt
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
 ```
 ---
 
-### 2. Thread Management
+3. Functors (Function Objects)
+A C++ functor (function object) is a class or struct object that can be called like a function.
+```cpp
+#include <iostream>
+#include <thread>
+using namespace std;
+
+class Base{
+    public:
+    void operator () (int x){
+       while(x-->0){
+        cout<<x<<endl;
+        } 
+    }
+};
+
+int main(){
+thread t1(Base(), 10);
+t1.join();
+return 0;
+}
+```
+```txt
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+```
+---
+
+4. Non-static Member Functions
+A non-static member function is a function that is declared in a member specification of a class without a static or friend specifier.
+```cpp
+#include <iostream>
+#include <thread>
+using namespace std;
+
+class Base {
+public:
+    void run(int x) {
+        while (x-- > 0) {
+            cout << x << endl;
+        }
+    }
+};
+
+int main() {
+    Base b;
+    thread t1(&Base::run, &b, 10); // Correct syntax
+    t1.join();
+    return 0;
+}
+```
+```txt
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+```
+
+---
+
+5. Static Member Functions
+A static member function in C++ is a function that belongs to a class rather than any specific object of the class. It can be called using the class name and does not require an instance of the class.
+```cpp
+#include <iostream>
+#include <thread>
+using namespace std;
+
+class Base {
+public:
+    static void run(int x) { // Made run() static
+        while (x-- > 0) {
+            cout << x << endl;
+        }
+    }
+};
+
+int main() {
+    thread t1(&Base::run, 10); // No need to pass an instance
+    t1.join();
+    return 0;
+}
+```
+```txt
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+```
+---
+
+### B. Thread Management
 
 - **`join()`**: Waits for the thread to finish execution.
 - **`detach()`**: Allows the thread to run independently.
