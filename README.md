@@ -15,6 +15,7 @@ In every application there is a default thread, which is main(); inside main() w
 
 ### A. Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
+```Note: If we create multiple threads to the same time it doesn't gaurantee which one will start first.```
 
 **Ways to Create Threads:**
 1. Function Pointers
@@ -22,7 +23,6 @@ Multithreading allows concurrent execution of multiple tasks to improve performa
 3. Functors (Function Objects)
 4. Non-static Member Functions
 5. Static Member Functions
-
 ---
 
 ### 1. Function Pointers
@@ -221,7 +221,7 @@ int main() {
 
 ### B. Thread Management
 
-- **`join()`**: Waits for the thread to finish execution.
+- **`join()`**: Waits for the thread to finish execution. join() use for join the process with main().
   ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
 ```cpp
 #include <iostream>
@@ -371,7 +371,8 @@ void sharedFunction() {
 ```
 ### **Race Condition**  
 
-A **race condition** occurs when multiple threads access and modify shared data simultaneously, leading to unpredictable behavior. This happens when proper synchronization mechanisms (like mutexes) are not used.  
+A **race condition** occurs when multiple threads access and modify shared data simultaneously, leading to unpredictable behavior. This happens when proper synchronization mechanisms (like mutexes) are not used. 
+```"Race condition is a situation where two or more threads/ process happend to change a common data at the same time." ```
 
 ```cpp
 #include <iostream>
@@ -445,13 +446,11 @@ Final Counter Value: 200000
 ---
 
 ### **Key Takeaways**
-   **Race Condition Definition:**  
-   - Occurs when multiple threads access and modify shared data concurrently, leading to unpredictable results.     
-   **Why it Happens:**  
-   - CPU switches between threads at unpredictable times, causing lost updates to shared variables.  
-   **Solution:**  
-   - Use **`std::mutex`** to lock critical sections and prevent concurrent modification.  
-   - Alternative: **`std::atomic<int>`** can also be used for simple integer operations.
+   - **Race Condition Definition:**  Occurs when multiple threads access and modify shared data concurrently, leading to unpredictable results.     
+   - **Why it Happens:**  CPU switches between threads at unpredictable times, causing lost updates to shared variables.  
+   - **Solution:**  Use **`std::mutex`** to lock critical sections and prevent concurrent modification., Alternative: **`std::atomic<int>`** can also be used for simple integer operations.
+   - **Notes:** _"If there is a race condition then we have protect it, and protected section is called critical section/ region. We use lock, unlock to avoid race condition."_
+
 
 ---
 
