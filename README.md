@@ -896,7 +896,7 @@ void signalFunction() {
 
 ---
 
-### 5. Deadlock Prevention
+### 5. Deadlock Prevention or Avoiding
 
 Deadlock occurs when two or more threads are waiting for each other to release resources.
 
@@ -912,6 +912,60 @@ std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
 std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
 ```
 
+**The following example will lead to deadlocks**
+```cpp
+std::mutex m1, m2, m3;
+void threadA() {
+// INTENTIONALLY BUGGY
+std::unique_lock l1{m1}, l2{m2}, l3{m3};
+}
+void threadB() {
+// INTENTIONALLY BUGGY
+std::unique_lock l3{m3}, l2{m2}, l1{m1};
+}
+```
+**Possible deadlock scenario**
+   - threadA() acquires locks on m1 and m2
+   - threadB() acquires lock on m3
+   - threadA() waits for threadB() to release m3
+   - threadB() waits for threadA() to release m2
+
+**Example:**
+**Deadlocks can be avoided by always locking mutexes in a globally consistent order**
+  - Ensures that one thread always “wins”
+  - Maintaining a globally consistent locking order requires considerable developer discipline
+  - Maintaining a globally consistent locking order may not be possible at all
+    
+```cpp
+std::mutex m1, m2, m3;
+void threadA() {
+// OK, will not deadlock
+std::unique_lock l1{m1}, l2{m2}, l3{m3};
+}
+void threadB() {
+// OK, will not deadlock
+std::unique_lock l1{m1}, l2{m2}, l3{m3};
+}
+```
+
+**Example:**
+**Sometimes it is not possible to guarantee a globally consistent order**
+  - The std::scoped_lock RAII wrapper can be used to safely lock any number of mutexes
+  - Employs a deadlock-avoidance algorithm if required
+  - Generally quite inefficient in comparison to std::unique_lock
+  - Should only be used as a last resort!
+    
+```cpp
+std::mutex m1, m2, m3;
+void threadA() {
+// OK, will not deadlock
+std::scoped_lock l{m1, m2, m3};
+}
+void threadB() {
+// OK, will not deadlock
+std::scoped_lock l{m3, m2, m1};
+}
+```
 ---
 
 ### 6. Thread Synchronization
