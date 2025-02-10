@@ -352,34 +352,34 @@ Hello
 ```
 ---
 
-### **Notes on `std::this_thread` Functions in C++**  
+### **Notes on `this_thread` Functions in C++**  
 
-#### **1. `std::this_thread::sleep_for()`**  
+#### **1. `this_thread::sleep_for()`**  
 - **Purpose:** Pauses the current thread for a specified duration.  
 - **Usage:**  
   ```cpp
-  std::this_thread::sleep_for(std::chrono::seconds(2)); // Sleep for 2 seconds
+  this_thread::sleep_for(chrono::seconds(2)); // Sleep for 2 seconds
   ```  
 - **Use Case:** Useful for implementing delays or throttling execution.  
 
-#### **2. `std::this_thread::sleep_until()`**  
+#### **2. `this_thread::sleep_until()`**  
 - **Purpose:** Pauses the current thread until a specified point in time.  
 - **Usage:**  
   ```cpp
-  auto wake_up_time = std::chrono::system_clock::now() + std::chrono::minutes(1);
-  std::this_thread::sleep_until(wake_up_time); // Sleep until the specified time
+  auto wake_up_time = chrono::system_clock::now() + chrono::minutes(1);
+  this_thread::sleep_until(wake_up_time); // Sleep until the specified time
   ```  
 - **Use Case:** Ideal for scheduling tasks at a specific future time.  
 
-#### **3. `std::this_thread::yield()`**  
+#### **3. `this_thread::yield()`**  
 - **Purpose:** Suggests to the OS that the current thread should pause and allow another thread to run.  
 - **Usage:**  
   ```cpp
-  std::this_thread::yield();
+  this_thread::yield();
   ```  
 - **Use Case:** Helps improve CPU efficiency in multithreading by preventing busy waiting.  
 
-#### **4. `std::this_thread::get_id()`**  
+#### **4. `this_thread::get_id()`**  
 - **Purpose:** Retrieves the unique ID of the currently executing thread.  
 - **Usage:**  
   ```cpp
@@ -618,8 +618,8 @@ Writer updated value to: 42
 | **Reentrancy**         | **Not allowed** (deadlock if locked again by same thread) | **Allowed** (same thread can lock multiple times) | **Not applicable** |
 | **Usage Scenario**     | Simple thread synchronization | Recursive functions needing multiple locks | Reader-writer synchronization |
 | **Performance**        | Moderate                    | Slightly slower due to multiple locks | Best for read-heavy workloads |
-| **Allows Multiple Readers?** | ❌ No (only one thread can access) | ❌ No (only one thread can access) | ✅ Yes (multiple threads can read simultaneously) |
-| **Allows Multiple Writers?** | ❌ No                    | ❌ No                            | ❌ No (only one writer at a time) |
+| **Allows Multiple Readers?** | No (only one thread can access) | No (only one thread can access) | Yes (multiple threads can read simultaneously) |
+| **Allows Multiple Writers?** | No                    | No                            | No (only one writer at a time) |
 | **Header File**        | `<mutex>`                   | `<mutex>`                      | `<shared_mutex>` |
 | **Use Case Example**   | Thread-safe resource access | Recursive function locking | Optimizing read-heavy applications |
 
@@ -721,7 +721,7 @@ int main() {
 | Feature          | `std::unique_lock`        | `std::shared_lock`          |
 |-----------------|-------------------------|---------------------------|
 | **Lock Type**    | Exclusive (write) lock  | Shared (read) lock       |
-| **Allows Multiple Threads?** | ❌ No (only one writer) | ✅ Yes (multiple readers) |
+| **Allows Multiple Threads?** | No (only one writer) | Yes (multiple readers) |
 | **Mutex Type**   | `std::mutex` or `std::shared_mutex` | Only `std::shared_mutex` |
 | **Use Case**     | When modifying shared data | When reading shared data |
 
@@ -762,8 +762,8 @@ int main() {
 }
 ```
 #### **Key Points**
-✔️ `lock()` ensures only **one thread** executes the critical section at a time.  
-✔️ **Blocking function**—the thread waits until it gets the lock.  
+  - `lock()` ensures only **one thread** executes the critical section at a time.
+  - **Blocking function**—the thread waits until it gets the lock.  
 
 ---
 
@@ -857,9 +857,9 @@ Thread 140235678539528 could not acquire lock
 ## **Key Differences Between `lock()`, `try_lock()`, and `operator bool()`**
 | Feature         | `lock()` | `try_lock()` | `operator bool()` |
 |---------------|---------|------------|----------------|
-| **Blocking?** | ✅ Yes | ❌ No (returns immediately) | ❌ No (only checks lock status) |
+| **Blocking?** | Yes | No (returns immediately) | No (only checks lock status) |
 | **Return Type** | `void` | `bool` (`true` if successful) | `bool` (`true` if lock is held) |
-| **Fails If Locked?** | ❌ No (waits for lock) | ✅ Yes (returns `false`) | ✅ Yes (returns `false`) |
+| **Fails If Locked?** | No (waits for lock) | Yes (returns `false`) | Yes (returns `false`) |
 | **Use Case** | When waiting for lock is okay | When non-blocking execution is needed | When checking lock ownership |
 
 ---
@@ -1014,8 +1014,8 @@ A **Binary Semaphore** is a synchronization mechanism that can have **only two s
 ---
 
 ## **Example: Binary Semaphore Using `std::counting_semaphore` (C++20)**
-🔹 **`std::counting_semaphore<1>` works like a binary semaphore** in C++20.  
-🔹 **One thread waits until the resource is available, and another thread signals (releases) it.**
+  - **`std::counting_semaphore<1>` works like a binary semaphore** in C++20.
+  - **One thread waits until the resource is available, and another thread signals (releases) it.**
 
 ```cpp
 #include <iostream>
@@ -1048,7 +1048,7 @@ int main() {
 
 ---
 
-## **🔹 Expected Output**
+## ** Expected Output**
 ```
 Thread 1 waiting for resource...
 Thread 1 acquired the resource!
@@ -1060,7 +1060,7 @@ Thread 2 releasing the resource...
 
 ---
 
-## **🔹 Explanation**
+## ** Explanation**
 1. **Thread 1 starts and acquires the semaphore** (resource is locked).
 2. **Thread 2 waits** since the semaphore is already acquired.
 3. **Thread 1 releases the semaphore** after work is done.
@@ -1082,8 +1082,6 @@ Thread 2 releasing the resource...
 ## **When to Use a Binary Semaphore?**
 ✔ **Use `std::binary_semaphore` when signaling is needed between threads** (e.g., producer-consumer).  
 ✔ **Use `std::mutex` when a thread must exclusively access a resource** and release it itself.  
-
-Would you like an example using C++11 (without C++20 `semaphore`)? 🚀
 
 ---
 
