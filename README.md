@@ -222,11 +222,11 @@ int main() {
 ### B. Thread Management
 
 - **`join()`**: Waits for the thread to finish execution. join() use for join the process with main().
-  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
+  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of ' system_error"```
 ```cpp
 #include <iostream>
 #include <thread>
-#include <chrono> // Required for std::chrono::seconds
+#include <chrono> // Required for  chrono::seconds
 using namespace std;
 
 // Function to be executed by the thread
@@ -261,11 +261,11 @@ main() after
 ```
 
 - **`detach()`**: Allows the thread to run independently.
-  ```Note: Double t.detach() is not allow, It showing en error "terminate called after throwing an instance of 'std::system_error"```
+  ```Note: Double t.detach() is not allow, It showing en error "terminate called after throwing an instance of ' system_error"```
 ```cpp
 #include <iostream>
 #include <thread>
-#include <chrono> // Required for std::chrono::seconds
+#include <chrono> // Required for  chrono::seconds
 using namespace std;
 
 // Function to be executed by the thread
@@ -313,7 +313,7 @@ if (t.joinable()) {
 ```cpp
 #include <iostream>
 #include <thread>
-#include <chrono> // Required for std::chrono::seconds
+#include <chrono> // Required for  chrono::seconds
 using namespace std;
 
 // Function to be executed by the thread
@@ -383,8 +383,8 @@ Hello
 - **Purpose:** Retrieves the unique ID of the currently executing thread.  
 - **Usage:**  
   ```cpp
-  std::thread::id this_id = std::this_thread::get_id();
-  std::cout << "Thread ID: " << this_id << std::endl;
+  thread::id this_id = this_thread::get_id();
+  cout << "Thread ID: " << this_id << endl;
   ```  
 - **Use Case:** Useful for debugging and tracking thread execution.  
 
@@ -395,16 +395,16 @@ Hello
 #### **1. Mutex Classes in C++ (`<mutex>` and `<shared_mutex>`)**  
 The C++ Standard Library provides multiple types of mutexes for thread synchronization:  
 
-- **`std::mutex`** – Basic mutex for mutual exclusion. Only one thread can lock it at a time.  
-- **`std::recursive_mutex`** – Allows the same thread to lock the mutex multiple times without causing a deadlock. Useful for recursive functions.  
-- **`std::shared_mutex`** – Supports both **exclusive** (write) and **shared** (read) locks, allowing multiple threads to read concurrently while ensuring exclusive access for writes.  
+- **`mutex`** – Basic mutex for mutual exclusion. Only one thread can lock it at a time.  
+- **`recursive_mutex`** – Allows the same thread to lock the mutex multiple times without causing a deadlock. Useful for recursive functions.  
+- **`shared_mutex`** – Supports both **exclusive** (write) and **shared** (read) locks, allowing multiple threads to read concurrently while ensuring exclusive access for writes.  
 
 #### **2. RAII Wrappers for Mutexes**  
 RAII (Resource Acquisition Is Initialization) wrappers help automatically manage the locking and unlocking of mutexes:  
 
-- **`std::unique_lock`** – A flexible RAII wrapper for exclusive locking of `std::mutex`.  
+- **`unique_lock`** – A flexible RAII wrapper for exclusive locking of `mutex`.  
   - Allows **deferred locking, ownership transfer, and timed locking**.  
-- **`std::shared_lock`** – A RAII wrapper for **shared (read-only) locking** with `std::shared_mutex`.  
+- **`shared_lock`** – A RAII wrapper for **shared (read-only) locking** with `shared_mutex`.  
 
 #### **Key Benefits of Using RAII Wrappers**  
 - **Automatic unlocking** when the lock object goes out of scope.  
@@ -413,20 +413,20 @@ RAII (Resource Acquisition Is Initialization) wrappers help automatically manage
 
 ---
 
-### **1. `std::mutex`** 
+### **1. `mutex`** 
 
 A **mutex (mutual exclusion)** is used to prevent Race Conditions by allowing only one thread to access a critical section at a time.
 
 **Types of Mutexes:**
-- `std::mutex`
-- `std::timed_mutex`
-- `std::recursive_mutex`
+- `mutex`
+- `timed_mutex`
+- `recursive_mutex`
 
 **Example:**
 ```cpp
-std::mutex mtx;
+mutex mtx;
 void sharedFunction() {
-    std::lock_guard<std::mutex> lock(mtx);
+    lock_guard< mutex> lock(mtx);
     // Critical section
 }
 ```
@@ -469,8 +469,8 @@ Final Counter Value: 149951
 
 ---
 
-### **Fixing Race Condition using `std::mutex`**
-To prevent race conditions, use a **mutex (`std::mutex`)** to ensure that only one thread modifies `counter` at a time.
+### **Fixing Race Condition using ` mutex`**
+To prevent race conditions, use a **mutex (`mutex`)** to ensure that only one thread modifies `counter` at a time.
 
 ```cpp
 #include <iostream>
@@ -509,35 +509,35 @@ Final Counter Value: 200000
 ### **Key Takeaways**
    - **Race Condition Definition:**  Occurs when multiple threads access and modify shared data concurrently, leading to unpredictable results.     
    - **Why it Happens:**  CPU switches between threads at unpredictable times, causing lost updates to shared variables.  
-   - **Solution:**  Use **`std::mutex`** to lock critical sections and prevent concurrent modification., Alternative: **`std::atomic<int>`** can also be used for simple integer operations.
+   - **Solution:**  Use **`mutex`** to lock critical sections and prevent concurrent modification., Alternative: **`atomic<int>`** can also be used for simple integer operations.
    - **Notes:** _"If there is a race condition then we have protect it, and protected section is called critical section/ region. We use lock, unlock to avoid race condition."_
       
 ---
-### **2. `std::recursive_mutex`**  
-A `std::recursive_mutex` allows the **same thread** to lock the mutex **multiple times** without causing a deadlock. This is useful in **recursive functions**, where a function calls itself and needs to acquire the same lock multiple times.  
+### **2. `recursive_mutex`**  
+A `recursive_mutex` allows the **same thread** to lock the mutex **multiple times** without causing a deadlock. This is useful in **recursive functions**, where a function calls itself and needs to acquire the same lock multiple times.  
 
-#### **Example: `std::recursive_mutex`**
+#### **Example: ` recursive_mutex`**
 ```cpp
 #include <iostream>
 #include <thread>
 #include <mutex>
 
-std::recursive_mutex rec_mutex;
+recursive_mutex rec_mutex;
 
 void recursive_function(int count) {
     if (count <= 0) return;
 
     rec_mutex.lock(); // Lock the mutex
-    std::cout << "Lock acquired for count: " << count << std::endl;
+    cout << "Lock acquired for count: " << count << endl;
     
     recursive_function(count - 1); // Recursive call
 
     rec_mutex.unlock(); // Unlock the mutex
-    std::cout << "Lock released for count: " << count << std::endl;
+    cout << "Lock released for count: " << count << endl;
 }
 
 int main() {
-    std::thread t1(recursive_function, 3);
+    thread t1(recursive_function, 3);
     t1.join();
     return 0;
 }
@@ -553,41 +553,41 @@ Lock released for count: 2
 Lock released for count: 3
 ```
 
-#### **Why Use `std::recursive_mutex`?**
+#### **Why Use ` recursive_mutex`?**
 - Without `recursive_mutex`, calling `lock()` multiple times within the same thread **causes a deadlock**.
-- `std::recursive_mutex` allows a thread to **re-enter a locked mutex** multiple times safely.
+- `recursive_mutex` allows a thread to **re-enter a locked mutex** multiple times safely.
 
 ---
 
-### **3. `std::shared_mutex`**
-A `std::shared_mutex` allows **multiple threads to read** the shared resource **simultaneously**, but **only one thread** can **write** at a time.  
+### **3. ` shared_mutex`**
+A `shared_mutex` allows **multiple threads to read** the shared resource **simultaneously**, but **only one thread** can **write** at a time.  
 - Multiple readers (shared lock) are allowed.
 - Writers (exclusive lock) block other threads.
 
-#### **Example: `std::shared_mutex`**
+#### **Example: ` shared_mutex`**
 ```cpp
 #include <iostream>
 #include <thread>
 #include <shared_mutex>
 
-std::shared_mutex shared_mtx;
+ shared_mutex shared_mtx;
 int shared_resource = 0;
 
 void reader(int id) {
-    std::shared_lock<std::shared_mutex> lock(shared_mtx); // Shared (read) lock
-    std::cout << "Reader " << id << " read value: " << shared_resource << std::endl;
+     shared_lock< shared_mutex> lock(shared_mtx); // Shared (read) lock
+     cout << "Reader " << id << " read value: " << shared_resource <<  endl;
 }
 
 void writer(int value) {
-    std::unique_lock<std::shared_mutex> lock(shared_mtx); // Exclusive (write) lock
+     unique_lock< shared_mutex> lock(shared_mtx); // Exclusive (write) lock
     shared_resource = value;
-    std::cout << "Writer updated value to: " << shared_resource << std::endl;
+     cout << "Writer updated value to: " << shared_resource <<  endl;
 }
 
 int main() {
-    std::thread r1(reader, 1);
-    std::thread r2(reader, 2);
-    std::thread w(writer, 42);
+     thread r1(reader, 1);
+     thread r2(reader, 2);
+     thread w(writer, 42);
 
     r1.join();
     r2.join();
@@ -604,14 +604,14 @@ Reader 2 read value: 0
 Writer updated value to: 42
 ```
 
-#### **Why Use `std::shared_mutex`?**
+#### **Why Use ` shared_mutex`?**
 - Allows **multiple readers** at the same time, improving performance.
 - Ensures **only one writer** at a time to maintain data integrity.
 
 ---
-### **Key Differences Between `std::mutex`, `std::recursive_mutex`, and `std::shared_mutex`**
+### **Key Differences Between ` mutex`, ` recursive_mutex`, and ` shared_mutex`**
 
-| Feature                | `std::mutex`                  | `std::recursive_mutex`          | `std::shared_mutex`               |
+| Feature                | `mutex`                  | `recursive_mutex`          | `shared_mutex`               |
 |------------------------|-----------------------------|--------------------------------|------------------------------------|
 | **Purpose**            | Basic mutual exclusion      | Allows the same thread to lock multiple times | Supports multiple readers but one writer |
 | **Locking Mechanism**  | Single lock per thread      | Multiple locks by the same thread allowed | Shared (read) & Exclusive (write) locks |
@@ -625,82 +625,82 @@ Writer updated value to: 42
 
 ---
 
-### **Understanding `std::unique_lock` and `std::shared_lock` in C++**  
+### **Understanding ` unique_lock` and ` shared_lock` in C++**  
 C++ provides **RAII (Resource Acquisition Is Initialization)** wrappers to manage mutex locking efficiently.  
 
 ---
 
-## **1. `std::unique_lock`**
-- A **flexible RAII wrapper** for `std::mutex`.  
+## **1. ` unique_lock`**
+- A **flexible RAII wrapper** for ` mutex`.  
 - Provides **exclusive** access to a shared resource.  
-- More **feature-rich** than `std::lock_guard` (supports deferred locking, try-locking, and timed locking).  
+- More **feature-rich** than ` lock_guard` (supports deferred locking, try-locking, and timed locking).  
 
-### **Example: Using `std::unique_lock` for Exclusive Locking**
+### **Example: Using ` unique_lock` for Exclusive Locking**
 ```cpp
 #include <iostream>
 #include <thread>
 #include <mutex>
 
-std::mutex mtx; // Standard mutex
+ mutex mtx; // Standard mutex
 int counter = 0; // Shared resource
 
 void increment() {
-    std::unique_lock<std::mutex> lock(mtx); // Exclusive lock
+     unique_lock< mutex> lock(mtx); // Exclusive lock
     counter++;  
-    std::cout << "Thread " << std::this_thread::get_id() << " incremented counter to " << counter << std::endl;
+     cout << "Thread " <<  this_thread::get_id() << " incremented counter to " << counter <<  endl;
     // Lock is automatically released when lock goes out of scope
 }
 
 int main() {
-    std::thread t1(increment);
-    std::thread t2(increment);
+     thread t1(increment);
+     thread t2(increment);
 
     t1.join();
     t2.join();
 
-    std::cout << "Final Counter Value: " << counter << std::endl;
+     cout << "Final Counter Value: " << counter <<  endl;
     return 0;
 }
 ```
-### **Key Features of `std::unique_lock`**
+### **Key Features of ` unique_lock`**
 - **Locks automatically** when created.
 - **Unlocks automatically** when out of scope.
 - Supports:
-  - **Deferred locking**: `std::unique_lock<std::mutex> lock(mtx, std::defer_lock);`
+  - **Deferred locking**: ` unique_lock< mutex> lock(mtx,  defer_lock);`
   - **Try-locking**: `lock.try_lock()`
-  - **Timed locking**: `lock.try_lock_for(std::chrono::milliseconds(100));`
+  - **Timed locking**: `lock.try_lock_for( chrono::milliseconds(100));`
 
 ---
 
-## **2. `std::shared_lock`**
-- Works with `std::shared_mutex` (from `<shared_mutex>` header).  
+## **2. ` shared_lock`**
+- Works with ` shared_mutex` (from `<shared_mutex>` header).  
 - Allows **multiple threads** to read a shared resource **simultaneously**.  
 - Prevents multiple threads from writing at the same time.  
 
-### **Example: Using `std::shared_lock` for Shared Read Access**
+### **Example: Using ` shared_lock` for Shared Read Access**
 ```cpp
 #include <iostream>
 #include <thread>
 #include <shared_mutex>
 
-std::shared_mutex sharedMtx;
+ shared_mutex sharedMtx;
 int sharedData = 100;
 
 void reader(int id) {
-    std::shared_lock<std::shared_mutex> lock(sharedMtx); // Shared read lock
-    std::cout << "Reader " << id << " read value: " << sharedData << std::endl;
+     shared_lock< shared_mutex> lock(sharedMtx); // Shared read lock
+     cout << "Reader " << id << " read value: " << sharedData <<  endl;
 }
 
 void writer(int value) {
-    std::unique_lock<std::shared_mutex> lock(sharedMtx); // Exclusive write lock
+     unique_lock< shared_mutex> lock(sharedMtx); // Exclusive write lock
     sharedData = value;
-    std::cout << "Writer updated value to: " << sharedData << std::endl;
+     cout << "Writer updated value to: " << sharedData <<  endl;
 }
 
 int main() {
-    std::thread r1(reader, 1);
-    std::thread r2(reader, 2);
-    std::thread w(writer, 500);
+     thread r1(reader, 1);
+     thread r2(reader, 2);
+     thread w(writer, 500);
 
     r1.join();
     r2.join();
@@ -710,19 +710,19 @@ int main() {
 }
 ```
 
-### **Key Features of `std::shared_lock`**
+### **Key Features of ` shared_lock`**
 - **Multiple threads can acquire a shared lock simultaneously.**
 - **Writers get exclusive access** while blocking readers.
 - **Optimized for read-heavy operations** like caching or logging.
 
 ---
 
-## **Key Differences Between `std::unique_lock` and `std::shared_lock`**
-| Feature          | `std::unique_lock`        | `std::shared_lock`          |
+## **Key Differences Between ` unique_lock` and ` shared_lock`**
+| Feature          | ` unique_lock`        | ` shared_lock`          |
 |-----------------|-------------------------|---------------------------|
 | **Lock Type**    | Exclusive (write) lock  | Shared (read) lock       |
 | **Allows Multiple Threads?** | No (only one writer) | Yes (multiple readers) |
-| **Mutex Type**   | `std::mutex` or `std::shared_mutex` | Only `std::shared_mutex` |
+| **Mutex Type**   | ` mutex` or ` shared_mutex` | Only ` shared_mutex` |
 | **Use Case**     | When modifying shared data | When reading shared data |
 
 ---
@@ -742,18 +742,18 @@ C++ provides **mutex-related functions** for managing thread synchronization eff
 #include <thread>
 #include <mutex>
 
-std::mutex mtx;
+ mutex mtx;
 
 void task(int id) {
     mtx.lock(); // Acquire lock
-    std::cout << "Thread " << id << " is executing...\n";
-    std::this_thread::sleep_for(std::chrono::seconds(1)); // Simulate work
+     cout << "Thread " << id << " is executing...\n";
+     this_thread::sleep_for( chrono::seconds(1)); // Simulate work
     mtx.unlock(); // Release lock
 }
 
 int main() {
-    std::thread t1(task, 1);
-    std::thread t2(task, 2);
+     thread t1(task, 1);
+     thread t2(task, 2);
 
     t1.join();
     t2.join();
@@ -778,21 +778,21 @@ int main() {
 #include <thread>
 #include <mutex>
 
-std::mutex mtx;
+ mutex mtx;
 
 void task(int id) {
     if (mtx.try_lock()) { // Try acquiring the lock
-        std::cout << "Thread " << id << " acquired the lock!\n";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+         cout << "Thread " << id << " acquired the lock!\n";
+         this_thread::sleep_for( chrono::seconds(1));
         mtx.unlock(); // Release the lock
     } else {
-        std::cout << "Thread " << id << " could not acquire the lock!\n";
+         cout << "Thread " << id << " could not acquire the lock!\n";
     }
 }
 
 int main() {
-    std::thread t1(task, 1);
-    std::thread t2(task, 2);
+     thread t1(task, 1);
+     thread t2(task, 2);
 
     t1.join();
     t2.join();
@@ -812,7 +812,7 @@ Thread 2 could not acquire the lock!
 ---
 
 ### **3. `operator bool()`**
-- Checks **whether a `std::unique_lock` object holds a lock**.  
+- Checks **whether a ` unique_lock` object holds a lock**.  
 - Returns `true` if the lock is acquired, otherwise `false`.  
 - Helps **verify if a lock is successfully acquired**.  
 
@@ -822,20 +822,20 @@ Thread 2 could not acquire the lock!
 #include <thread>
 #include <mutex>
 
-std::mutex mtx;
+ mutex mtx;
 
 void task() {
-    std::unique_lock<std::mutex> lock(mtx, std::try_to_lock); // Try acquiring the lock
+     unique_lock< mutex> lock(mtx,  try_to_lock); // Try acquiring the lock
     if (lock) { // Checks if the lock is held
-        std::cout << "Lock acquired by thread " << std::this_thread::get_id() << "\n";
+         cout << "Lock acquired by thread " <<  this_thread::get_id() << "\n";
     } else {
-        std::cout << "Thread " << std::this_thread::get_id() << " could not acquire lock\n";
+         cout << "Thread " <<  this_thread::get_id() << " could not acquire lock\n";
     }
 }
 
 int main() {
-    std::thread t1(task);
-    std::thread t2(task);
+     thread t1(task);
+     thread t2(task);
 
     t1.join();
     t2.join();
@@ -849,7 +849,7 @@ Lock acquired by thread 140235678539520
 Thread 140235678539528 could not acquire lock
 ```
 #### **Key Points**
-    `operator bool()` is used with `std::unique_lock` to check if locking was successful.  
+    `operator bool()` is used with ` unique_lock` to check if locking was successful.  
     Helps in **conditional execution** based on lock acquisition.  
 
 ---
@@ -867,7 +867,7 @@ Thread 140235678539528 could not acquire lock
 ## **When to Use?**
     **Use `lock()`** when **you need to wait** for the lock (critical section).  
     **Use `try_lock()`** when **you don’t want to block** execution.  
-    **Use `operator bool()`** to **check if a lock is held** inside `std::unique_lock`.  
+    **Use `operator bool()`** to **check if a lock is held** inside ` unique_lock`.  
 
 ---
 
@@ -877,18 +877,18 @@ A **condition variable** is used to synchronize threads based on certain conditi
 
 **Example:**
 ```cpp
-std::condition_variable cv;
-std::mutex mtx;
+ condition_variable cv;
+ mutex mtx;
 bool ready = false;
 
 void waitFunction() {
-    std::unique_lock<std::mutex> lock(mtx);
+     unique_lock< mutex> lock(mtx);
     cv.wait(lock, [] { return ready; });
-    std::cout << "Condition met!" << std::endl;
+     cout << "Condition met!" <<  endl;
 }
 
 void signalFunction() {
-    std::lock_guard<std::mutex> lock(mtx);
+     lock_guard< mutex> lock(mtx);
     ready = true;
     cv.notify_one();
 }
@@ -903,25 +903,25 @@ Deadlock occurs when two or more threads are waiting for each other to release r
 **Solutions:**
 1. Lock ordering
 2. Try-lock mechanisms
-3. Using `std::lock()`
+3. Using ` lock()`
 
 **Example:**
 ```cpp
-std::lock(mtx1, mtx2);
-std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
-std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
+ lock(mtx1, mtx2);
+ lock_guard< mutex> lock1(mtx1,  adopt_lock);
+ lock_guard< mutex> lock2(mtx2,  adopt_lock);
 ```
 
 **The following example will lead to deadlocks**
 ```cpp
-std::mutex m1, m2, m3;
+ mutex m1, m2, m3;
 void threadA() {
 // INTENTIONALLY BUGGY
-std::unique_lock l1{m1}, l2{m2}, l3{m3};
+ unique_lock l1{m1}, l2{m2}, l3{m3};
 }
 void threadB() {
 // INTENTIONALLY BUGGY
-std::unique_lock l3{m3}, l2{m2}, l1{m1};
+ unique_lock l3{m3}, l2{m2}, l1{m1};
 }
 ```
 **Possible deadlock scenario**
@@ -937,33 +937,33 @@ std::unique_lock l3{m3}, l2{m2}, l1{m1};
   - Maintaining a globally consistent locking order may not be possible at all
     
 ```cpp
-std::mutex m1, m2, m3;
+ mutex m1, m2, m3;
 void threadA() {
 // OK, will not deadlock
-std::unique_lock l1{m1}, l2{m2}, l3{m3};
+ unique_lock l1{m1}, l2{m2}, l3{m3};
 }
 void threadB() {
 // OK, will not deadlock
-std::unique_lock l1{m1}, l2{m2}, l3{m3};
+ unique_lock l1{m1}, l2{m2}, l3{m3};
 }
 ```
 
 **Example:**
 **Sometimes it is not possible to guarantee a globally consistent order**
-  - The std::scoped_lock RAII wrapper can be used to safely lock any number of mutexes
+  - The  scoped_lock RAII wrapper can be used to safely lock any number of mutexes
   - Employs a deadlock-avoidance algorithm if required
-  - Generally quite inefficient in comparison to std::unique_lock
+  - Generally quite inefficient in comparison to  unique_lock
   - Should only be used as a last resort!
     
 ```cpp
-std::mutex m1, m2, m3;
+ mutex m1, m2, m3;
 void threadA() {
 // OK, will not deadlock
-std::scoped_lock l{m1, m2, m3};
+ scoped_lock l{m1, m2, m3};
 }
 void threadB() {
 // OK, will not deadlock
-std::scoped_lock l{m3, m2, m1};
+ scoped_lock l{m3, m2, m1};
 }
 ```
 ---
@@ -979,9 +979,9 @@ Ensures that threads work together in a coordinated manner to avoid race conditi
 
 ---
 
-### 7. `std::async` and Task-Based Parallelism
+### 7. ` async` and Task-Based Parallelism
 
-`std::async` allows execution of tasks asynchronously and returns a `std::future` to retrieve the result later.
+` async` allows execution of tasks asynchronously and returns a ` future` to retrieve the result later.
 
 **Example:**
 ```cpp
@@ -992,8 +992,8 @@ int computeValue(int x) {
 }
 
 int main() {
-    std::future<int> result = std::async(std::launch::async, computeValue, 10);
-    std::cout << "Result: " << result.get() << std::endl;
+     future<int> result =  async( launch::async, computeValue, 10);
+     cout << "Result: " << result.get() <<  endl;
     return 0;
 }
 ```
@@ -1013,31 +1013,31 @@ A **Binary Semaphore** is a synchronization mechanism that can have **only two s
 
 ---
 
-## **Example: Binary Semaphore Using `std::counting_semaphore` (C++20)**
-  - **`std::counting_semaphore<1>` works like a binary semaphore** in C++20.
+## **Example: Binary Semaphore Using ` counting_semaphore` (C++20)**
+  - **` counting_semaphore<1>` works like a binary semaphore** in C++20.
   - **One thread waits until the resource is available, and another thread signals (releases) it.**
 
 ```cpp
 #include <iostream>
 #include <thread>
-#include <semaphore> // C++20: Required for std::binary_semaphore
+#include <semaphore> // C++20: Required for  binary_semaphore
 
-std::counting_semaphore<1> semaphore(1); // Binary semaphore (1 means available)
+ counting_semaphore<1> semaphore(1); // Binary semaphore (1 means available)
 
 void task(int id) {
-    std::cout << "Thread " << id << " waiting for resource...\n";
+     cout << "Thread " << id << " waiting for resource...\n";
     semaphore.acquire(); // Wait (P operation)
     
-    std::cout << "Thread " << id << " acquired the resource!\n";
-    std::this_thread::sleep_for(std::chrono::seconds(2)); // Simulate work
+     cout << "Thread " << id << " acquired the resource!\n";
+     this_thread::sleep_for( chrono::seconds(2)); // Simulate work
 
-    std::cout << "Thread " << id << " releasing the resource...\n";
+     cout << "Thread " << id << " releasing the resource...\n";
     semaphore.release(); // Signal (V operation)
 }
 
 int main() {
-    std::thread t1(task, 1);
-    std::thread t2(task, 2);
+     thread t1(task, 1);
+     thread t2(task, 2);
 
     t1.join();
     t2.join();
@@ -1080,12 +1080,12 @@ Thread 2 releasing the resource...
 ---
 
 ## **When to Use a Binary Semaphore?**
-✔ **Use `std::binary_semaphore` when signaling is needed between threads** (e.g., producer-consumer).  
-✔ **Use `std::mutex` when a thread must exclusively access a resource** and release it itself.  
+✔ **Use ` binary_semaphore` when signaling is needed between threads** (e.g., producer-consumer).  
+✔ **Use ` mutex` when a thread must exclusively access a resource** and release it itself.  
 
 ---
 
-### 8. `std::promise` and `std::future`
+### 8. ` promise` and ` future`
 
 Used for passing data between threads in a producer-consumer style.
 
@@ -1093,15 +1093,15 @@ Used for passing data between threads in a producer-consumer style.
 ```cpp
 #include <future>
 
-void setValue(std::promise<int>& prom) {
+void setValue( promise<int>& prom) {
     prom.set_value(42);
 }
 
 int main() {
-    std::promise<int> prom;
-    std::future<int> fut = prom.get_future();
-    std::thread t(setValue, std::ref(prom));
-    std::cout << "Value: " << fut.get() << std::endl;
+     promise<int> prom;
+     future<int> fut = prom.get_future();
+     thread t(setValue,  ref(prom));
+     cout << "Value: " << fut.get() <<  endl;
     t.join();
     return 0;
 }
