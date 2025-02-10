@@ -631,7 +631,6 @@ C++ provides **RAII (Resource Acquisition Is Initialization)** wrappers to manag
 ---
 
 ## **1. `std::unique_lock`**
-🔹 **What is `std::unique_lock`?**  
 - A **flexible RAII wrapper** for `std::mutex`.  
 - Provides **exclusive** access to a shared resource.  
 - More **feature-rich** than `std::lock_guard` (supports deferred locking, try-locking, and timed locking).  
@@ -674,7 +673,6 @@ int main() {
 ---
 
 ## **2. `std::shared_lock`**
-🔹 **What is `std::shared_lock`?**  
 - Works with `std::shared_mutex` (from `<shared_mutex>` header).  
 - Allows **multiple threads** to read a shared resource **simultaneously**.  
 - Prevents multiple threads from writing at the same time.  
@@ -726,6 +724,150 @@ int main() {
 | **Allows Multiple Threads?** | ❌ No (only one writer) | ✅ Yes (multiple readers) |
 | **Mutex Type**   | `std::mutex` or `std::shared_mutex` | Only `std::shared_mutex` |
 | **Use Case**     | When modifying shared data | When reading shared data |
+
+---
+
+### **Understanding `lock()`, `try_lock()`, and `operator bool()` in C++**  
+
+C++ provides **mutex-related functions** for managing thread synchronization efficiently.  
+
+### **1. `lock()`**
+- Blocks the calling thread **until it acquires the lock**.  
+- Ensures **exclusive access** to a shared resource.  
+- If another thread already holds the lock, `lock()` **waits**.  
+
+#### **Example: Using `lock()`**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+
+void task(int id) {
+    mtx.lock(); // Acquire lock
+    std::cout << "Thread " << id << " is executing...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Simulate work
+    mtx.unlock(); // Release lock
+}
+
+int main() {
+    std::thread t1(task, 1);
+    std::thread t2(task, 2);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
+#### **Key Points**
+✔️ `lock()` ensures only **one thread** executes the critical section at a time.  
+✔️ **Blocking function**—the thread waits until it gets the lock.  
+
+---
+
+### **2. `try_lock()`**
+- Tries to acquire the lock **without blocking**.  
+- If the lock is **available**, it **succeeds** and returns `true`.  
+- If the lock is **already taken**, it **fails immediately** and returns `false`.  
+
+#### **Example: Using `try_lock()`**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+
+void task(int id) {
+    if (mtx.try_lock()) { // Try acquiring the lock
+        std::cout << "Thread " << id << " acquired the lock!\n";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        mtx.unlock(); // Release the lock
+    } else {
+        std::cout << "Thread " << id << " could not acquire the lock!\n";
+    }
+}
+
+int main() {
+    std::thread t1(task, 1);
+    std::thread t2(task, 2);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
+#### **Possible Output**
+```
+Thread 1 acquired the lock!
+Thread 2 could not acquire the lock!
+```
+#### **Key Points**
+    `try_lock()` **does not block**—it returns immediately.  
+    Use for **non-blocking** operations where waiting is not desirable.  
+
+---
+
+### **3. `operator bool()`**
+- Checks **whether a `std::unique_lock` object holds a lock**.  
+- Returns `true` if the lock is acquired, otherwise `false`.  
+- Helps **verify if a lock is successfully acquired**.  
+
+#### **Example: Using `operator bool()`**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+
+void task() {
+    std::unique_lock<std::mutex> lock(mtx, std::try_to_lock); // Try acquiring the lock
+    if (lock) { // Checks if the lock is held
+        std::cout << "Lock acquired by thread " << std::this_thread::get_id() << "\n";
+    } else {
+        std::cout << "Thread " << std::this_thread::get_id() << " could not acquire lock\n";
+    }
+}
+
+int main() {
+    std::thread t1(task);
+    std::thread t2(task);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
+#### **Possible Output**
+```
+Lock acquired by thread 140235678539520
+Thread 140235678539528 could not acquire lock
+```
+#### **Key Points**
+    `operator bool()` is used with `std::unique_lock` to check if locking was successful.  
+    Helps in **conditional execution** based on lock acquisition.  
+
+---
+
+## **Key Differences Between `lock()`, `try_lock()`, and `operator bool()`**
+| Feature         | `lock()` | `try_lock()` | `operator bool()` |
+|---------------|---------|------------|----------------|
+| **Blocking?** | ✅ Yes | ❌ No (returns immediately) | ❌ No (only checks lock status) |
+| **Return Type** | `void` | `bool` (`true` if successful) | `bool` (`true` if lock is held) |
+| **Fails If Locked?** | ❌ No (waits for lock) | ✅ Yes (returns `false`) | ✅ Yes (returns `false`) |
+| **Use Case** | When waiting for lock is okay | When non-blocking execution is needed | When checking lock ownership |
+
+---
+
+## **When to Use?**
+    **Use `lock()`** when **you need to wait** for the lock (critical section).  
+    **Use `try_lock()`** when **you don’t want to block** execution.  
+    **Use `operator bool()`** to **check if a lock is held** inside `std::unique_lock`.  
 
 ---
 
