@@ -1000,6 +1000,93 @@ int main() {
 
 ---
 
+## **Understanding Binary Semaphore in C++**
+
+### **What is a Binary Semaphore?**
+A **Binary Semaphore** is a synchronization mechanism that can have **only two states**:
+1. **0 (Locked/Unavailable)**
+2. **1 (Unlocked/Available)**  
+
+- It is similar to a **mutex** but allows signaling between threads.  
+- Used for **resource control** when only **one thread** should access a shared resource at a time.  
+- Unlike a mutex, **semaphores can be signaled (released) by a different thread** than the one that acquired them.  
+
+---
+
+## **Example: Binary Semaphore Using `std::counting_semaphore` (C++20)**
+🔹 **`std::counting_semaphore<1>` works like a binary semaphore** in C++20.  
+🔹 **One thread waits until the resource is available, and another thread signals (releases) it.**
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <semaphore> // C++20: Required for std::binary_semaphore
+
+std::counting_semaphore<1> semaphore(1); // Binary semaphore (1 means available)
+
+void task(int id) {
+    std::cout << "Thread " << id << " waiting for resource...\n";
+    semaphore.acquire(); // Wait (P operation)
+    
+    std::cout << "Thread " << id << " acquired the resource!\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // Simulate work
+
+    std::cout << "Thread " << id << " releasing the resource...\n";
+    semaphore.release(); // Signal (V operation)
+}
+
+int main() {
+    std::thread t1(task, 1);
+    std::thread t2(task, 2);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
+
+---
+
+## **🔹 Expected Output**
+```
+Thread 1 waiting for resource...
+Thread 1 acquired the resource!
+Thread 2 waiting for resource...
+Thread 1 releasing the resource...
+Thread 2 acquired the resource!
+Thread 2 releasing the resource...
+```
+
+---
+
+## **🔹 Explanation**
+1. **Thread 1 starts and acquires the semaphore** (resource is locked).
+2. **Thread 2 waits** since the semaphore is already acquired.
+3. **Thread 1 releases the semaphore** after work is done.
+4. **Thread 2 acquires the semaphore** and executes.
+5. **Thread 2 releases the semaphore** after execution.
+
+---
+
+## **Key Differences Between Binary Semaphore & Mutex**
+| Feature         | **Binary Semaphore** | **Mutex** |
+|---------------|------------------|--------|
+| **Value Range** | 0 or 1 | Only locked/unlocked |
+| **Ownership** | Can be released by a different thread | Must be released by the same thread |
+| **Blocking?** | Yes, if unavailable | Yes, if locked |
+| **Use Case** | Resource synchronization | Mutual exclusion |
+
+---
+
+## **When to Use a Binary Semaphore?**
+✔ **Use `std::binary_semaphore` when signaling is needed between threads** (e.g., producer-consumer).  
+✔ **Use `std::mutex` when a thread must exclusively access a resource** and release it itself.  
+
+Would you like an example using C++11 (without C++20 `semaphore`)? 🚀
+
+---
+
 ### 8. `std::promise` and `std::future`
 
 Used for passing data between threads in a producer-consumer style.
