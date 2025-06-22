@@ -865,9 +865,9 @@ Thread 140235678539528 could not acquire lock
 ---
 
 ## **When to Use?**
-    **Use `lock()`** when **you need to wait** for the lock (critical section).  
-    **Use `try_lock()`** when **you don’t want to block** execution.  
-    **Use `operator bool()`** to **check if a lock is held** inside ` unique_lock`.  
+   1. **Use `lock()`** when **you need to wait** for the lock (critical section).  
+   2. **Use `try_lock()`** when **you don’t want to block** execution.  
+   3. **Use `operator bool()`** to **check if a lock is held** inside ` unique_lock`.  
 
 ---
 
