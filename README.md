@@ -4,7 +4,7 @@
 
 ### Threads
 In every application there is a default thread, which is main(); inside main() we create other threads.
-```"A thread is also known as a lightweight process. The idea is to achieve parallelism by dividing a process into multiple threads."```
+>"A thread is also known as a lightweight process. The idea is to achieve parallelism by dividing a process into multiple threads."
 
 **Exp.**
 1. The browser has multiple tabs that can be different threads.
