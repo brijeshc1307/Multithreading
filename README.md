@@ -112,6 +112,7 @@ int main() {
 
 ### 3. Functors (Function Objects)
 A C++ functor (function object) is a class or struct object that can be called like a function.
+>Functor, जिसे function object भी कहा जाता है, एक ऐसा object होता है जिसे ऐसे कॉल किया जा सकता है जैसे वह कोई function हो। यह class का object होता है जिसमें operator() को overload किया गया होता है, जिससे उसे function की तरह व्यवहार करने की क्षमता मिलती है।
 ```cpp
 #include <iostream>
 #include <thread>
