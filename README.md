@@ -15,7 +15,7 @@ In every application there is a default thread, which is main(); inside main() w
 
 ### A. Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
-```Note: If we create multiple threads to the same time it doesn't gaurantee which one will start first.```
+>Note: If we create multiple threads to the same time it doesn't gaurantee which one will start first.
 
 **Ways to Create Threads:**
 1. Function Pointers
@@ -77,6 +77,7 @@ Hello from thread!
 
 ### 2. Lambda Expressions
 Lambda expression allows us to define anonymous function objects (functors) which can either be used inline or passed as an argument.
+>Lambda expression हमें गुमनाम (anonymous) function objects या functors परिभाषित करने की अनुमति देता है, जिन्हें या तो inline उपयोग किया जा सकता है या फिर एक argument के रूप में पास किया जा सकता है।
 ```cpp
 #include <iostream>
 #include <thread>
@@ -147,6 +148,7 @@ return 0;
 
 ### 4. Non-static Member Functions
 A non-static member function is a function that is declared in a member specification of a class without a static or friend specifier.
+>एक non-static member function वह फ़ंक्शन होता है जिसे किसी क्लास की member specification में static या friend specifier के बिना घोषित किया जाता है। यह फ़ंक्शन केवल क्लास के किसी object (instance) के माध्यम से ही access किया जा सकता है, क्योंकि यह उस object की state (data members) पर काम करता है।
 ```cpp
 #include <iostream>
 #include <thread>
@@ -185,6 +187,7 @@ int main() {
 
 ### 5. Static Member Functions
 A static member function in C++ is a function that belongs to a class rather than any specific object of the class. It can be called using the class name and does not require an instance of the class.
+>C++ में एक static member function ऐसा फ़ंक्शन होता है जो किसी क्लास के किसी विशेष object की बजाय पूरी क्लास से संबंधित होता है। इसे class name के द्वारा कॉल किया जा सकता है और इसे कॉल करने के लिए class का कोई object (instance) बनाना आवश्यक नहीं होता।
 ```cpp
 #include <iostream>
 #include <thread>
@@ -222,7 +225,7 @@ int main() {
 ### B. Thread Management
 
 - **`join()`**: Waits for the thread to finish execution. join() use for join the process with main().
-  ```Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of ' system_error"```
+  >Note: Double t.join() is not allow, It showing en error "terminate called after throwing an instance of ' system_error."
 ```cpp
 #include <iostream>
 #include <thread>
@@ -261,7 +264,7 @@ main() after
 ```
 
 - **`detach()`**: Allows the thread to run independently.
-  ```Note: Double t.detach() is not allow, It showing en error "terminate called after throwing an instance of ' system_error"```
+  >Note: Double t.detach() is not allow, It showing en error "terminate called after throwing an instance of ' system_error"
 ```cpp
 #include <iostream>
 #include <thread>
@@ -396,9 +399,11 @@ Hello
 The C++ Standard Library provides multiple types of mutexes for thread synchronization:  
 
 - **`mutex`** – Basic mutex for mutual exclusion. Only one thread can lock it at a time.  
-- **`recursive_mutex`** – Allows the same thread to lock the mutex multiple times without causing a deadlock. Useful for recursive functions.  
-- **`shared_mutex`** – Supports both **exclusive** (write) and **shared** (read) locks, allowing multiple threads to read concurrently while ensuring exclusive access for writes.  
-
+- **`recursive_mutex`** – Allows the same thread to lock the mutex multiple times without causing a deadlock. Useful for recursive functions.
+  >यह एक ही thread को एक mutex को कई बार लॉक करने की अनुमति देता है बिना deadlock उत्पन्न किए। यह विशेष रूप से recursive functions (पुनरावृत्तीय फ़ंक्शनों) के लिए उपयोगी होता है।
+- **`shared_mutex`** – Supports both **exclusive** (write) and **shared** (read) locks, allowing multiple threads to read concurrently while ensuring exclusive access for writes.
+  >यह exclusive (write) और shared (read) दोनों प्रकार के locks को सपोर्ट करता है, जिससे कई threads एक साथ read (पढ़) कर सकते हैं, लेकिन write (लिखने) के लिए केवल एक thread को exclusive access (विशेष पहुंच) मिलती है।
+  
 #### **2. RAII Wrappers for Mutexes**  
 RAII (Resource Acquisition Is Initialization) wrappers help automatically manage the locking and unlocking of mutexes:  
 
