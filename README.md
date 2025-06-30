@@ -16,6 +16,9 @@ In every application there is a default thread, which is main(); inside main() w
 ### A. Multithreading in C++
 Multithreading allows concurrent execution of multiple tasks to improve performance and responsiveness.
 >Note: If we create multiple threads to the same time it doesn't gaurantee which one will start first.
+>Like a cook boiling rice while chopping vegetables — doing multiple tasks at once to save time.
+That’s multithreading.(जैसे एक रसोइया चावल उबालते समय सब्ज़ी काटता है — एक साथ कई काम करता है।
+यही है मल्टीथ्रेडिंग।)
 
 **Ways to Create Threads:**
 1. Function Pointers
