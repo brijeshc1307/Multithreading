@@ -76,7 +76,7 @@ Hello from thread!
 ---
 
 ### 2. Lambda Expressions
-Lambda expression allows us to define anonymous function objects (functors) which can either be used inline or passed as an argument.
+Lambda expression allows us to define anonymous (एनोनिमस) function objects (functors) which can either be used inline or passed as an argument.
 >Lambda expression हमें गुमनाम (anonymous) function objects या functors परिभाषित करने की अनुमति देता है, जिन्हें या तो inline उपयोग किया जा सकता है या फिर एक argument के रूप में पास किया जा सकता है।
 ```cpp
 #include <iostream>
