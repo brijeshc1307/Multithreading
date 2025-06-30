@@ -1016,7 +1016,7 @@ A **Binary Semaphore** is a synchronization mechanism that can have **only two s
 - It is similar to a **mutex** but allows signaling between threads.  
 - Used for **resource control** when only **one thread** should access a shared resource at a time.  
 - Unlike a mutex, **semaphores can be signaled (released) by a different thread** than the one that acquired them.  
-
+>ये semaphore एक दरवाज़े जैसा है जो शुरुआत में बंद है (count = 0). जब main thread release() करता है, दरवाज़ा खुलता है और worker thread अंदर जा सकता है (यानि आगे बढ़ सकता है).
 ---
 
 ## **Example: Binary Semaphore Using ` counting_semaphore` (C++20)**
