@@ -521,7 +521,8 @@ Final Counter Value: 200000
    - **Race Condition Definition:**  Occurs when multiple threads access and modify shared data concurrently, leading to unpredictable results.     
    - **Why it Happens:**  CPU switches between threads at unpredictable times, causing lost updates to shared variables.  
    - **Solution:**  Use **`mutex`** to lock critical sections and prevent concurrent modification., Alternative: **`atomic<int>`** can also be used for simple integer operations.
-   - **Notes:** _"If there is a race condition then we have protect it, and protected section is called critical section/ region. We use lock, unlock to avoid race condition."_
+>**Notes:** _"If there is a race condition then we have protect it, and protected section is called critical section/ region. We use lock, unlock to avoid race condition."_
+>यदि race condition होती है, तो हमें उसे सुरक्षित करना होता है, और उस सुरक्षित भाग को critical section/region कहा जाता है। हम lock और unlock का उपयोग करके race condition से बचते हैं।
       
 ---
 ### **2. `recursive_mutex`**  
