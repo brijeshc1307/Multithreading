@@ -443,7 +443,8 @@ void sharedFunction() {
 ### **Race Condition**  
 
 A **race condition** occurs when multiple threads access and modify shared data simultaneously, leading to unpredictable behavior. This happens when proper synchronization mechanisms (like mutexes) are not used. 
-```"Race condition is a situation where two or more threads/ process happend to change a common data at the same time." ```
+>"Race condition is a situation where two or more threads/ process happend to change a common data at the same time."
+>Race condition एक ऐसी स्थिति है जहाँ दो या अधिक थ्रेड्स/प्रोसेस एक ही सामान्य डेटा को एक साथ बदलने की कोशिश करते हैं।
 
 ```cpp
 #include <iostream>
