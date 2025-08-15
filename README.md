@@ -1083,7 +1083,7 @@ int main() {
 
 ---
 
-## ** Expected Output**
+## **Expected Output**
 ```
 Thread 1 waiting for resource...
 Thread 1 acquired the resource!
@@ -1095,7 +1095,7 @@ Thread 2 releasing the resource...
 
 ---
 
-## ** Explanation**
+## **Explanation**
 1. **Thread 1 starts and acquires the semaphore** (resource is locked).
 2. **Thread 2 waits** since the semaphore is already acquired.
 3. **Thread 1 releases the semaphore** after work is done.
@@ -1196,7 +1196,7 @@ int main() {
 
 ---
 
-### 🧠 Output:
+### Output:
 
 ```
 Main thread is waiting for result...
@@ -1206,7 +1206,7 @@ Result received: 42
 
 ---
 
-## 🧩 When to Use `promise` & `future`
+## When to Use `promise` & `future`
 
 | Use Case                         | Example                                            |
 | -------------------------------- | -------------------------------------------------- |
