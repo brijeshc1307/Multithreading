@@ -1122,7 +1122,7 @@ Thread 2 releasing the resource...
 
 ### 8. ` promise` and ` future`
 
-Used for passing data between threads in a producer-consumer style.
+ `std::promise` and `std::future` are part of the **thread communication mechanisms** introduced in **C++11**. They allow **one thread to produce a result** and **another thread to consume it**, making it easy to pass data safely between threads.
 
 **Example:**
 ```cpp
@@ -1141,6 +1141,111 @@ int main() {
     return 0;
 }
 ```
+
+---
+
+## **What is `std::promise` and `std::future` in C++ Multithreading?**
+
+| Concept        | Description                                                             |
+| -------------- | ----------------------------------------------------------------------- |
+| `std::promise` | Used to **set a value** that will be **retrieved by another thread**.   |
+| `std::future`  | Used by the **consumer thread** to **wait for and retrieve the value**. |
+
+---
+
+## **How they work together**
+
+1. A `promise` is created in the main (or producer) thread.
+2. The associated `future` is obtained using `promise.get_future()`.
+3. The `future` is passed to one thread (consumer), and the `promise` is kept in the other (producer).
+4. The producer sets the value via `promise.set_value(...)`.
+5. The consumer waits and gets the value via `future.get()`.
+
+---
+
+## **Basic Example**
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <future>
+
+using namespace std;
+
+// Worker function
+void worker(std::promise<int> prom) {
+    cout << "Worker thread is doing some work...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // Simulate work
+    prom.set_value(42); // Set result
+}
+
+int main() {
+    std::promise<int> prom;          // Create promise
+    std::future<int> fut = prom.get_future(); // Get associated future
+
+    std::thread t(worker, std::move(prom)); // Pass promise to worker thread
+
+    cout << "Main thread is waiting for result...\n";
+    int result = fut.get(); // Wait for result from worker
+    cout << "Result received: " << result << endl;
+
+    t.join(); // Join the thread
+    return 0;
+}
+```
+
+---
+
+### 🧠 Output:
+
+```
+Main thread is waiting for result...
+Worker thread is doing some work...
+Result received: 42
+```
+
+---
+
+## 🧩 When to Use `promise` & `future`
+
+| Use Case                         | Example                                            |
+| -------------------------------- | -------------------------------------------------- |
+| Thread needs to return a value   | Background computation result                      |
+| Need async error reporting       | Use `promise.set_exception(...)`                   |
+| Coordination between threads     | One waits until the other signals completion       |
+| Replacement for shared variables | Safer than using raw shared variables with mutexes |
+
+---
+
+## Exception Handling Example
+
+```cpp
+void throwingWorker(std::promise<int> prom) {
+    try {
+        throw std::runtime_error("Something went wrong!");
+    } catch (...) {
+        prom.set_exception(std::current_exception()); // Pass exception to future
+    }
+}
+
+int main() {
+    std::promise<int> prom;
+    std::future<int> fut = prom.get_future();
+
+    std::thread t(throwingWorker, std::move(prom));
+
+    try {
+        int result = fut.get(); // Will throw here
+        cout << "Result: " << result << endl;
+    } catch (const std::exception& e) {
+        cout << "Caught exception from thread: " << e.what() << endl;
+    }
+
+    t.join();
+}
+```
+
+---
 
 ---
 
